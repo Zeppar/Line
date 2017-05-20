@@ -28,7 +28,7 @@ public class GameController : MonoBehaviour {
 
 	ChessItem nearItem = null;
 
-	public int count = 0;
+	public int backCount = 0;
 
 	public bool gameStart = false;
 
@@ -44,7 +44,6 @@ public class GameController : MonoBehaviour {
 	void Start() {
 		InitChessBoard ();
 		RandomLine ();
-
 	}
 
 	void InitChessBoard() {
@@ -71,11 +70,59 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
-	void SimulateBack() {
-		int i = 0;
-		while (i < count) {
+	public void SimulateBack() {
+		StartCoroutine (StartSimulate ());
+	}
 
+	IEnumerator StartSimulate() {
+		int i = 0;
+		while (i < backCount) {
 			i++;
+			if (Random.Range (0, 100) > 50) {
+				//点击 
+				print("Click");
+				int index = Random.Range(0,16);
+				if (!chessList [index].isSelected) {
+					chessList [index].ActivateLineItem ();
+					GameController.manager.ConvertIndex (chessList [index].curItemIndex, chessList [index].linedItemIndexs [0]);
+				} else {
+					GameController.manager.ConvertIndex (chessList [index].curItemIndex, chessList [index].linedItemIndexs [0]);
+				}
+			} else {
+				//交换
+				print("Change");
+				int index = Random.Range(0,16);
+				if (index >= 0 && index < 4) {
+					if (!chessList [index].isSelected) {
+						chessList [index].ActivateLineItem ();
+						ChangeItemFunc(DragDirection.Up);
+					} else {
+						ChangeItemFunc(DragDirection.Up);
+					}
+				} else if (index >= 4 && index < 8) {
+					if (!chessList [index].isSelected) {
+						chessList [index].ActivateLineItem ();
+						ChangeItemFunc(DragDirection.Down);
+					} else {
+						ChangeItemFunc(DragDirection.Down);
+					}
+				} else if (index >= 8 && index < 12) {
+					if (!chessList [index].isSelected) {
+						chessList [index].ActivateLineItem ();
+						ChangeItemFunc(DragDirection.Left);
+					} else {
+						ChangeItemFunc(DragDirection.Left);
+					}
+				} else if (index >= 12 && index < 16) {
+					if (!chessList [index].isSelected) {
+						chessList [index].ActivateLineItem ();
+						ChangeItemFunc(DragDirection.Right);
+					} else {
+						ChangeItemFunc(DragDirection.Right);
+					}
+				}
+			}
+			yield return new WaitForSeconds (0.1f);
 		}
 		gameStart = true;
 	}
@@ -113,42 +160,57 @@ public class GameController : MonoBehaviour {
 		if (!gameStart)
 			return;
 		if (Input.GetKeyDown (KeyCode.UpArrow)) {
-			if (CheckAvailable (DragDirection.Up)) {
-				nearItem = GetNearItem (DragDirection.Up);
-				if (nearItem != null) {
-					Type temp = nearItem.curType;
-					nearItem.ChangeToType (selectItem.curType);
-					selectItem.ChangeToType (temp);
-				}
-			}
+//			if (CheckAvailable (DragDirection.Up)) {
+//				nearItem = GetNearItem (DragDirection.Up);
+//				if (nearItem != null) {
+//					Type temp = nearItem.curType;
+//					nearItem.ChangeToType (selectItem.curType);
+//					selectItem.ChangeToType (temp);
+//				}
+//			}
+			ChangeItemFunc(DragDirection.Up);
 		} else if(Input.GetKeyDown(KeyCode.DownArrow)){
-			if (CheckAvailable (DragDirection.Down)) {
-				nearItem = GetNearItem (DragDirection.Down);
-				if (nearItem != null) {
-					Type temp = nearItem.curType;
-					nearItem.ChangeToType (selectItem.curType);
-					selectItem.ChangeToType (temp);
-				}
-			}
+//			if (CheckAvailable (DragDirection.Down)) {
+//				nearItem = GetNearItem (DragDirection.Down);
+//				if (nearItem != null) {
+//					Type temp = nearItem.curType;
+//					nearItem.ChangeToType (selectItem.curType);
+//					selectItem.ChangeToType (temp);
+//				}
+//			}
+			ChangeItemFunc(DragDirection.Down);
 		} else if(Input.GetKeyDown(KeyCode.LeftArrow)){
-			if (CheckAvailable (DragDirection.Left)) {
-				nearItem = GetNearItem (DragDirection.Left);
-				if (nearItem != null) {
-					Type temp = nearItem.curType;
-					nearItem.ChangeToType (selectItem.curType);
-					selectItem.ChangeToType (temp);
-				}
-			}
+//			if (CheckAvailable (DragDirection.Left)) {
+//				nearItem = GetNearItem (DragDirection.Left);
+//				if (nearItem != null) {
+//					Type temp = nearItem.curType;
+//					nearItem.ChangeToType (selectItem.curType);
+//					selectItem.ChangeToType (temp);
+//				}
+//			}
+			ChangeItemFunc(DragDirection.Left);
 		} else if(Input.GetKeyDown(KeyCode.RightArrow)){
-			if (CheckAvailable (DragDirection.Right)) {
-				nearItem = GetNearItem (DragDirection.Right);
-				if (nearItem != null) {
-					Type temp = nearItem.curType;
-					nearItem.ChangeToType (selectItem.curType);
-					selectItem.ChangeToType (temp);
-				}
-			}
+//			if (CheckAvailable (DragDirection.Right)) {
+//				nearItem = GetNearItem (DragDirection.Right);
+//				if (nearItem != null) {
+//					Type temp = nearItem.curType;
+//					nearItem.ChangeToType (selectItem.curType);
+//					selectItem.ChangeToType (temp);
+//				}
+//			}
+			ChangeItemFunc(DragDirection.Right);
 		} 
+	}
+
+	void ChangeItemFunc(DragDirection dir) {
+		if (CheckAvailable (dir)) {
+			nearItem = GetNearItem (dir);
+			if (nearItem != null) {
+				Type temp = nearItem.curType;
+				nearItem.ChangeToType (selectItem.curType);
+				selectItem.ChangeToType (temp);
+			}
+		}
 	}
 
 	ChessItem GetNearItem(DragDirection dir) {

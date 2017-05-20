@@ -20,7 +20,7 @@ public class ChessItem : MonoBehaviour, IPointerClickHandler/*, IBeginDragHandle
 	public Image flagImage;
 	public Image selectImage;
 	bool isActive = false;
-	bool isSelected = false;
+	public bool isSelected = false;
 	public Type curType = Type.Cow;
 	Vector2 startPos;
 	Vector2 endPos;
