@@ -5,11 +5,13 @@ using UnityEngine.UI;
 
 public class Background : MonoBehaviour {
 
-	public InputField countInput;
+	public InputField lineCountInput;
+	public InputField backCountInput;
 
 	public void confirmButtonOnClick() {
-		if (countInput.text != "") {
-			GameController.manager.backCount = int.Parse (countInput.text);
+		if (backCountInput.text != "" && lineCountInput.text != "") {
+			GameController.manager.backCount = int.Parse (backCountInput.text);
+			GameController.manager.lineCount = int.Parse (lineCountInput.text);
 			GameController.manager.SimulateBack ();
 		}
 	}

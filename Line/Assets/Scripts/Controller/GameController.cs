@@ -30,6 +30,8 @@ public class GameController : MonoBehaviour {
 
 	public int backCount = 0;
 
+	public int lineCount = 2;
+
 	public bool gameStart = false;
 
 	void Awake() {
@@ -42,8 +44,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	void Start() {
-		InitChessBoard ();
-		RandomLine ();
+		//start game after clicking start button 
 	}
 
 	void InitChessBoard() {
@@ -51,26 +52,51 @@ public class GameController : MonoBehaviour {
 			ChessItem item = Instantiate (chessPrefab);
 			item.transform.SetParent (boardTransform, true);
 			item.curItemIndex = i;
+			item.lineCount = lineCount;
 			chessList.Add (item);
 		}
 	}
 
 	void RandomLine() {
+		List<int> indexList = new List<int> (4);
 		for (int i = 0; i < chessList.Count; i++) {
 			if (!chessList [i].lined) {
-				int random = Random.Range (0, Level * Level);
-				while (chessList [random].lined || random == i) {
-						random = Random.Range (0, Level * Level);
-				}
 				chessList [i].lined = true;
+				int random = 0;
+				indexList.Clear ();
+				//Add self
+				indexList.Add (i);
+				for (int j = 0; j < lineCount - 1; j++) {
+					random = Random.Range (0, Level * Level);
+					while (chessList [random].lined || random == i) {
+						random = Random.Range (0, Level * Level);
+					}
+					chessList [random].lined = true;
+					indexList.Add (random);
+				}
+
+
+				/*chessList [i].lined = true;
 				chessList [random].lined = true;
 				chessList [i].linedItemIndexs.Add (chessList [random].curItemIndex);
-				chessList [random].linedItemIndexs.Add (chessList [i].curItemIndex);
+				chessList [random].linedItemIndexs.Add (chessList [i].curItemIndex);*/
+
+				for (int k = 0; k < indexList.Count; k++) {
+//					chessList [indexList [k]].lined = true;
+					for (int l = 0; l < indexList.Count; l++) {
+						if (chessList [indexList [k]].curItemIndex != chessList [indexList [l]].curItemIndex) {
+							//Add
+							chessList [indexList [k]].linedItemIndexs.Add(chessList [indexList [l]].curItemIndex);
+						}
+					}
+				}
 			}
 		}
 	}
 
 	public void SimulateBack() {
+		InitChessBoard ();
+		RandomLine ();
 		StartCoroutine (StartSimulate ());
 	}
 
@@ -84,9 +110,9 @@ public class GameController : MonoBehaviour {
 				int index = Random.Range(0,16);
 				if (!chessList [index].isSelected) {
 					chessList [index].ActivateLineItem ();
-					GameController.manager.ConvertIndex (chessList [index].curItemIndex, chessList [index].linedItemIndexs [0]);
+					GameController.manager.ConvertIndex (chessList [index].curItemIndex, chessList [index].linedItemIndexs);
 				} else {
-					GameController.manager.ConvertIndex (chessList [index].curItemIndex, chessList [index].linedItemIndexs [0]);
+					GameController.manager.ConvertIndex (chessList [index].curItemIndex, chessList [index].linedItemIndexs);
 				}
 			} else {
 				//交换
@@ -127,7 +153,7 @@ public class GameController : MonoBehaviour {
 		gameStart = true;
 	}
 
-	public void ActivateIndex(int index1, int index2) {
+	public void ActivateIndex(int index1, List<int> indexList) {
 		hasSelectedItem = true;
 		for (int i = 0; i < chessList.Count; i++) {
 			if (chessList [i].curItemIndex == index1) {
@@ -135,20 +161,32 @@ public class GameController : MonoBehaviour {
 				chessList [i].ActivateSelf ();
 				selectItem = chessList [i];
 			}
-			else if (chessList [i].curItemIndex == index2) {
-				chessList [i].DeselectSelf ();
-				chessList [i].ActivateSelf ();
-			} else {
-				chessList [i].DeselectSelf ();
-				chessList [i].DeactivateSelf ();
+			else {
+				bool find = false;
+				for (int j = 0; j < indexList.Count; j++) {
+					if (chessList [i].curItemIndex == indexList[j]) {
+						find = true;
+						chessList [i].DeselectSelf ();
+						chessList [i].ActivateSelf ();
+					}
+				}
+
+				if (!find) {
+					chessList [i].DeselectSelf ();
+					chessList [i].DeactivateSelf ();
+				}
 			}
 		}
 	}
 
-	public void ConvertIndex(int index1, int index2) {
+	public void ConvertIndex(int index1, List<int> indexList) {
 		for (int i = 0; i < chessList.Count; i++) {
-			if (chessList [i].curItemIndex == index1 || chessList [i].curItemIndex == index2) {
+			if (chessList [i].curItemIndex == index1) {
 				chessList [i].Convert ();
+			}
+			for (int j = 0; j < indexList.Count; j++) {
+				if (chessList [i].curItemIndex == indexList [j])
+					chessList [i].Convert ();
 			}
 		}
 	}

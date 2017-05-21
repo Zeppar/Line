@@ -24,6 +24,7 @@ public class ChessItem : MonoBehaviour, IPointerClickHandler/*, IBeginDragHandle
 	public Type curType = Type.Cow;
 	Vector2 startPos;
 	Vector2 endPos;
+	public int lineCount = 2;
 
 	void Start() {
 	
@@ -41,7 +42,7 @@ public class ChessItem : MonoBehaviour, IPointerClickHandler/*, IBeginDragHandle
 			ActivateLineItem ();
 		}
 		else
-			GameController.manager.ConvertIndex (curItemIndex, linedItemIndexs [0]);
+			GameController.manager.ConvertIndex (curItemIndex, linedItemIndexs);
 	}
 
 //	public void OnBeginDrag(PointerEventData data) {
@@ -78,7 +79,7 @@ public class ChessItem : MonoBehaviour, IPointerClickHandler/*, IBeginDragHandle
 	}
 
 	public void ActivateLineItem() {
-		GameController.manager.ActivateIndex (curItemIndex, linedItemIndexs [0]);
+		GameController.manager.ActivateIndex (curItemIndex, linedItemIndexs);
 	}
 
 	public void SelectSelf() {
