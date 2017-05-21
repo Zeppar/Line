@@ -34,6 +34,8 @@ public class GameController : MonoBehaviour {
 
 	public bool gameStart = false;
 
+	public int patternCount = 2;
+
 	void Awake() {
 		if (manager == null) {
 			manager = this;

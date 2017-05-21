@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 public enum Type {
 	Cow,
-	Hen
+	Hen,
+	Monkey
 }
 
 public class ChessItem : MonoBehaviour, IPointerClickHandler/*, IBeginDragHandler, IEndDragHandler*/ {
@@ -17,6 +18,7 @@ public class ChessItem : MonoBehaviour, IPointerClickHandler/*, IBeginDragHandle
 	public List<int> linedItemIndexs = new List<int> (4);
 	public Image cowImage;
 	public Image henImage;
+	public Image monkeyImage;
 	public Image flagImage;
 	public Image selectImage;
 	bool isActive = false;
@@ -60,10 +62,17 @@ public class ChessItem : MonoBehaviour, IPointerClickHandler/*, IBeginDragHandle
 			curType = Type.Hen;
 			cowImage.gameObject.SetActive (false);
 			henImage.gameObject.SetActive (true);
-		} else {
-			curType = Type.Cow;
+			monkeyImage.gameObject.SetActive (false);
+		} else if (curType == Type.Hen){
+			curType = Type.Monkey;
 			cowImage.gameObject.SetActive (true);
 			henImage.gameObject.SetActive (false);
+			monkeyImage.gameObject.SetActive (false);
+		} else if (curType == Type.Monkey){
+			curType = Type.Cow;
+			cowImage.gameObject.SetActive (false);
+			henImage.gameObject.SetActive (false);
+			monkeyImage.gameObject.SetActive (true);
 		}
 	}
 
@@ -72,9 +81,15 @@ public class ChessItem : MonoBehaviour, IPointerClickHandler/*, IBeginDragHandle
 		if (curType == Type.Cow) {
 			cowImage.gameObject.SetActive (true);
 			henImage.gameObject.SetActive (false);
-		} else {
+			monkeyImage.gameObject.SetActive (false);
+		} else if (curType == Type.Hen) {
 			cowImage.gameObject.SetActive (false);
 			henImage.gameObject.SetActive (true);
+			monkeyImage.gameObject.SetActive (false);
+		} else if (curType == Type.Monkey) {
+			cowImage.gameObject.SetActive (false);
+			henImage.gameObject.SetActive (false);
+			monkeyImage.gameObject.SetActive (true);
 		}
 	}
 
