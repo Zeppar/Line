@@ -1,10 +1,10 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/UI/Background.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Item/ChessItem.cs">
     <Files>
-      <File FileName="Assets/Scripts/Item/ChessItem.cs" Line="82" Column="70" />
-      <File FileName="Assets/Scripts/Controller/GameController.cs" Line="37" Column="30" />
-      <File FileName="Assets/Scripts/UI/Background.cs" Line="17" Column="74" />
+      <File FileName="Assets/Scripts/Item/ChessItem.cs" Line="28" Column="17" />
+      <File FileName="Assets/Scripts/Controller/GameController.cs" Line="178" Column="34" />
+      <File FileName="Assets/Scripts/UI/Background.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

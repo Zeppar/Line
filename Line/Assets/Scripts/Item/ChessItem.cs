@@ -65,14 +65,14 @@ public class ChessItem : MonoBehaviour, IPointerClickHandler/*, IBeginDragHandle
 			monkeyImage.gameObject.SetActive (false);
 		} else if (curType == Type.Hen){
 			curType = Type.Monkey;
-			cowImage.gameObject.SetActive (true);
-			henImage.gameObject.SetActive (false);
-			monkeyImage.gameObject.SetActive (false);
-		} else if (curType == Type.Monkey){
-			curType = Type.Cow;
 			cowImage.gameObject.SetActive (false);
 			henImage.gameObject.SetActive (false);
 			monkeyImage.gameObject.SetActive (true);
+		} else if (curType == Type.Monkey){
+			curType = Type.Cow;
+			cowImage.gameObject.SetActive (true);
+			henImage.gameObject.SetActive (false);
+			monkeyImage.gameObject.SetActive (false);
 		}
 	}
 
